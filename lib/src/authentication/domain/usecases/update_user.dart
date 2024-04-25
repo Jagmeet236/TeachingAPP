@@ -1,5 +1,5 @@
 import 'package:education_app/core/enums/update_user.dart';
-import 'package:education_app/core/usecases/usecases.dart';
+import 'package:education_app/core/useCases/use_cases.dart';
 import 'package:education_app/core/utils/typedef.dart';
 import 'package:education_app/src/authentication/domain/repository/authentication_repository.dart';
 import 'package:equatable/equatable.dart';
