@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "405489969119",
-    "project_id": "education-app-77557",
-    "storage_bucket": "education-app-77557.appspot.com"
+    "project_number": "886561037802",
+    "project_id": "educationapp-2c16b",
+    "storage_bucket": "educationapp-2c16b.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:405489969119:android:a0ad082c9e6e972a59466a",
+        "mobilesdk_app_id": "1:886561037802:android:7d0d3c7b170114b7b36693",
         "android_client_info": {
           "package_name": "com.jagmeet.education_app"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCPprBVjryi_SbamwEfVOoGD9lt0z7nSWw"
+          "current_key": "AIzaSyCmlrv22vLNpB6RpCx1VEmfiYt502r9Yx8"
         }
       ],
       "services": {

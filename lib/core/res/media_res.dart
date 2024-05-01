@@ -27,8 +27,8 @@ class MediaRes {
   static const documentsGradientBackground =
       '$_baseImage/documents_gradient_background .png ';
 
-  static const leaderboardGradientBackground =
-      '$_baseImage/Leaderboard_gradient_background.png';
+  static const leaderBoardGradientBackground =
+      '$_baseImage/LeaderBoard_gradient_background.png';
 
   static const pageUnderConstruction =
       '$_baseLottie/page_under_construction.json';
@@ -65,6 +65,6 @@ class MediaRes {
   static const bronzeMedal = '$_baseIcon/bronze_medal.png';
 
 // Lottie
-  static const emptyLeaderboard = '$_baseLottie/empty_leaderboard.json';
+  static const emptyLeaderBoard = '$_baseLottie/empty_leaderBoard.json';
   static const noNotifications = '_$_baseLottie/no_notifications.json';
 }
