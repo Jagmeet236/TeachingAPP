@@ -1,116 +1,254 @@
-import 'package:education_app/core/enums/update_user.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:education_app/core/errors/exceptions.dart';
+import 'package:education_app/core/utils/constants.dart';
+import 'package:education_app/core/utils/typedef.dart';
 import 'package:education_app/src/authentication/data/dataSources/authentication_remote_data_source.dart';
+import 'package:education_app/src/authentication/data/models/user_model.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_storage_mocks/firebase_storage_mocks.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:google_sign_in_mocks/google_sign_in_mocks.dart';
+import 'package:mocktail/mocktail.dart';
+
+class MockFirebaseAuth extends Mock implements FirebaseAuth {}
+
+class MockUser extends Mock implements User {
+  String _uid = 'Test uid';
+
+  @override
+  String get uid => _uid;
+  set uid(String value) {
+    if (_uid != value) _uid = value;
+  }
+}
+
+class MockUserCredential extends Mock implements UserCredential {
+  MockUserCredential([User? user]) : _user = user;
+  User? _user;
+  @override
+  User? get user => _user;
+  set user(User? value) {
+    if (_user != value) _user = value;
+  }
+}
 
 void main() {
-  late FakeFirebaseFirestore cloudStoreClient;
-  late MockFirebaseAuth authClient;
-  late MockFirebaseStorage dbClient;
+  late FirebaseAuth authClient;
+  late FirebaseFirestore cloudStoreClient;
+  late FirebaseStorage dbClient;
   late AuthenticationRemoteDataSource dataSource;
-  setUp(() async {
+  late UserCredential userCredential;
+  late MockUser mockUser;
+  late DocumentReference<DataMap> documentReference;
+  const tUser = LocalUserModel.empty();
+  setUpAll(() async {
+    authClient = MockFirebaseAuth();
     cloudStoreClient = FakeFirebaseFirestore();
-    final googleSignIn = MockGoogleSignIn();
-    final signinAccount = await googleSignIn.signIn();
-    final googleAuth = await signinAccount!.authentication;
-    final AuthCredential credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
-    // Sign in.
-    final mockUser = MockUser(
-      uid: 'someUid',
-      email: 'bob@somedomain.com',
-      displayName: 'Bob',
-    );
-    authClient = MockFirebaseAuth(mockUser: mockUser);
-    final result = await authClient.signInWithCredential(credential);
-    final user = result.user;
+    documentReference = cloudStoreClient.collection('users').doc();
+    await documentReference
+        .set(tUser.copyWith(uid: documentReference.id).toMap());
+
     dbClient = MockFirebaseStorage();
+    mockUser = MockUser()..uid = documentReference.id;
+    userCredential = MockUserCredential(mockUser);
     dataSource = AuthenticationRemoteDataSourceImpl(
       authClient: authClient,
       cloudStoreClient: cloudStoreClient,
       dbClient: dbClient,
     );
+    when(() => authClient.currentUser).thenReturn(mockUser);
   });
-
   const tPassword = 'Test Password';
-  const tFullName = 'Test Full Name';
-  const tEmail = 'testemail@mail.org';
+  const tFullName = 'Test full name';
+  const tEmail = 'Test email';
+  final tFirebaseAuthException = FirebaseAuthException(
+    code: 'user-not-found',
+    message: 'There is no user record corresponding to this identifier. '
+        'The user may have been deleted',
+  );
+  group('forgotPassword', () {
+    test(
+      'should complete successfully when no [Exception] is thrown',
+      () async {
+        when(
+          () => authClient.sendPasswordResetEmail(
+            email: any(named: 'email'),
+          ),
+        ).thenAnswer((_) async => Future.value());
 
-  test('signUp', () async {
-    // act
-    await dataSource.signUp(
-      email: tEmail,
-      fullName: tFullName,
-      password: tPassword,
+        final call = dataSource.forgotPassword(tEmail);
+        expect(call, completes);
+
+        verify(() => authClient.sendPasswordResetEmail(email: tEmail))
+            .called(1);
+        verifyNoMoreInteractions(authClient);
+      },
     );
-
-    // expect that the user was created in the firestore and the
-    // authClient also this user
-    expect(
-      authClient.currentUser,
-      isNotNull,
-    );
-    expect(
-      authClient.currentUser!.displayName,
-      tFullName,
-    );
-
-    final user = await cloudStoreClient
-        .collection('users')
-        .doc(
-          authClient.currentUser!.uid,
-        )
-        .get();
-
-    expect(user.exists, isTrue);
+    test(
+        'should throw [ServerException] when [FirebaseAUthException] '
+        'is thrown', () async {
+      when(
+        () => authClient.sendPasswordResetEmail(
+          email: any(
+            named: 'email',
+          ),
+        ),
+      ).thenThrow(
+        tFirebaseAuthException,
+      );
+      final call = dataSource.forgotPassword;
+      expect(() => call(tEmail), throwsA(isA<ServerException>()));
+      verify(() => authClient.sendPasswordResetEmail(email: tEmail)).called(1);
+      verifyNoMoreInteractions(authClient);
+    });
   });
-  test('signIn', () async {
-    await dataSource.signUp(
-      email: 'newEmail@mail.com',
-      fullName: tFullName,
-      password: tPassword,
+  group('signIn', () {
+    test('should return [LocalUserModel] when no [Exception] is thrown',
+        () async {
+      when(
+        () => authClient.signInWithEmailAndPassword(
+          email: any(named: 'email'),
+          password: any(named: 'password'),
+        ),
+      ).thenAnswer((_) async => userCredential);
+      final result = await dataSource.signIn(
+        email: tEmail,
+        password: tPassword,
+      );
+      expect(result.uid, userCredential.user!.uid);
+      expect(result.email, '');
+      verify(
+        () => authClient.signInWithEmailAndPassword(
+          email: tEmail,
+          password: tPassword,
+        ),
+      ).called(1);
+      verifyNoMoreInteractions(authClient);
+    });
+    test(
+      'should throw [ServerException] when user is '
+      'null after signin in',
+      () async {
+        final emptyUserCredential = MockUserCredential();
+        when(
+          () => authClient.signInWithEmailAndPassword(
+            email: any(named: 'email'),
+            password: any(named: 'password'),
+          ),
+        ).thenAnswer((_) async => emptyUserCredential);
+        final call = dataSource.signIn;
+        expect(
+          () => call(email: tEmail, password: tPassword),
+          throwsA(
+            isA<ServerException>(),
+          ),
+        );
+        verify(
+          () => authClient.signInWithEmailAndPassword(
+            email: tEmail,
+            password: tPassword,
+          ),
+        ).called(1);
+        verifyNoMoreInteractions(authClient);
+      },
     );
-    await authClient.signOut();
-
-    await dataSource.signIn(
-      email: 'newEmail@mail.com',
-      password: tPassword,
-    );
-    expect(
-      authClient.currentUser,
-      isNotNull,
-    );
-    expect(
-      authClient.currentUser!.email,
-      'newEmail@mail.com',
+    test(
+      'should throw [ServerException] when [FirebaseAuthException] '
+      'thrown',
+      () async {
+        when(
+          () => authClient.signInWithEmailAndPassword(
+            email: any(named: 'email'),
+            password: any(named: 'password'),
+          ),
+        ).thenThrow(tFirebaseAuthException);
+        final call = dataSource.signIn;
+        expect(
+          () => call(email: tEmail, password: tPassword),
+          throwsA(isA<ServerException>()),
+        );
+        verify(
+          () => authClient.signInWithEmailAndPassword(
+            email: tEmail,
+            password: tPassword,
+          ),
+        ).called(1);
+        verifyNoMoreInteractions(authClient);
+      },
     );
   });
-  group('updateUser', () {
-    test('displayName', () async {
-      // act
-      await dataSource.signUp(
+
+  group('signUp', () {
+    test('should complete successfully when no [Exception] is thrown',
+        () async {
+      when(
+        () => authClient.createUserWithEmailAndPassword(
+          email: any(named: 'email'),
+          password: any(named: 'password'),
+        ),
+      ).thenAnswer((_) async => userCredential);
+
+      when(() => userCredential.user?.updateDisplayName(any())).thenAnswer(
+        (_) async => Future.value(),
+      );
+      when(() => userCredential.user?.updatePhotoURL(any())).thenAnswer(
+        (_) async => Future.value(),
+      );
+
+      final call = dataSource.signUp(
         email: tEmail,
         fullName: tFullName,
         password: tPassword,
       );
-      await dataSource.updateUser(
-        action: UpdateUserAction.displayName,
-        userData: 'new name',
+      expect(
+        call,
+        completes,
       );
-      expect(authClient.currentUser!.displayName, 'new name');
-    });
-    test('email', () async {
-      await dataSource.updateUser(
-        action: UpdateUserAction.email,
-        userData: 'newemail@mail.conm',
+      verify(
+        () => authClient.createUserWithEmailAndPassword(
+          email: tEmail,
+          password: tPassword,
+        ),
+      ).called(1);
+      await untilCalled(
+        () => userCredential.user?.updateDisplayName(any()),
       );
-      expect(authClient.currentUser!.email, 'newemail@mail.conm');
+      await untilCalled(
+        () => userCredential.user?.updatePhotoURL(any()),
+      );
+      verify(() => userCredential.user?.updateDisplayName(tFullName)).called(1);
+      verify(() => userCredential.user?.updatePhotoURL(kDefaultAvatar))
+          .called(1);
+      verifyNoMoreInteractions(authClient);
     });
+    test(
+      'should throw [ServerException] when [FirebaseAuthException] '
+      'thrown',
+      () async {
+        when(
+          () => authClient.createUserWithEmailAndPassword(
+            email: any(named: 'email'),
+            password: any(named: 'password'),
+          ),
+        ).thenThrow(tFirebaseAuthException);
+        final call = dataSource.signUp;
+        expect(
+          call(
+            email: tEmail,
+            password: tPassword,
+            fullName: tFullName,
+          ),
+          throwsA(isA<ServerException>()),
+        );
+
+        verify(
+          () => authClient.createUserWithEmailAndPassword(
+            email: tEmail,
+            password: tPassword,
+          ),
+        ).called(1);
+      },
+    );
   });
 }

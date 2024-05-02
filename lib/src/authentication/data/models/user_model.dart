@@ -35,7 +35,7 @@ class LocalUserModel extends LocalUser {
           points: 0,
           fullName: '',
         );
-  LocalUser copyWith({
+  LocalUserModel copyWith({
     String? uid,
     String? email,
     String? profilePic,
@@ -47,7 +47,7 @@ class LocalUserModel extends LocalUser {
     List<String>? following,
     List<String>? followers,
   }) {
-    return LocalUser(
+    return LocalUserModel(
       uid: uid ?? this.uid,
       email: email ?? this.email,
       profilePic: profilePic ?? this.profilePic,
