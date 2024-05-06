@@ -4,8 +4,8 @@ import 'package:education_app/src/authentication/domain/entities/user.dart';
 import 'package:education_app/src/authentication/domain/repository/authentication_repository.dart';
 import 'package:equatable/equatable.dart';
 
-class SigIn extends UseCaseWithParams<LocalUser, SignInParams> {
-  const SigIn(this._authenticationRepository);
+class SignIn extends UseCaseWithParams<LocalUser, SignInParams> {
+  const SignIn(this._authenticationRepository);
 
   final AuthenticationRepository _authenticationRepository;
 
