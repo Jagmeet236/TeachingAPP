@@ -4,8 +4,8 @@ import 'package:education_app/core/utils/typedef.dart';
 import 'package:education_app/src/authentication/domain/repository/authentication_repository.dart';
 import 'package:equatable/equatable.dart';
 
-class UpdateUser extends UseCaseWithParams<void, UpdateUserParams> {
-  const UpdateUser(this._authenticationRepository);
+class UpdateUserUseCase extends UseCaseWithParams<void, UpdateUserParams> {
+  const UpdateUserUseCase(this._authenticationRepository);
 
   final AuthenticationRepository _authenticationRepository;
 
