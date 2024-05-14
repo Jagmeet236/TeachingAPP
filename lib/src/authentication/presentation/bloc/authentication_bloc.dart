@@ -2,11 +2,7 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:education_app/core/enums/update_user.dart';
 import 'package:education_app/src/authentication/domain/entities/user.dart';
-import 'package:education_app/src/authentication/domain/useCases/forgot_password.dart';
-import 'package:education_app/src/authentication/domain/useCases/sign_in.dart';
-import 'package:education_app/src/authentication/domain/useCases/sign_up.dart';
-import 'package:education_app/src/authentication/domain/useCases/update_user.dart';
-
+import 'package:education_app/src/authentication/domain/useCases/authentication_use_cases.dart';
 import 'package:equatable/equatable.dart';
 part 'authentication_event.dart';
 part 'authentication_state.dart';
