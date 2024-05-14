@@ -44,8 +44,8 @@ class ForgotPasswordEvent extends AuthenticationEvent {
       ];
 }
 
-class UpdateUser extends AuthenticationEvent {
-  UpdateUser({
+class UpdateUserEvent extends AuthenticationEvent {
+  UpdateUserEvent({
     required this.action,
     required this.userData,
   }) : assert(
