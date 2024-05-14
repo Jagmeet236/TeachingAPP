@@ -22,16 +22,16 @@ class SignUpEvent extends AuthenticationEvent {
   const SignUpEvent({
     required this.email,
     required this.password,
-    required this.name,
+    required this.fullName,
   });
   final String email;
   final String password;
-  final String name;
+  final String fullName;
   @override
   List<String> get props => [
         email,
         password,
-        name,
+        fullName,
       ];
 }
 
