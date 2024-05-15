@@ -53,7 +53,58 @@ void main() {
     statusCode: 'There is no user record corresponding to this identifier. '
         'The user may have been deleted',
   );
-
+  group('forgotPassword', () {
+    blocTest<AuthenticationBloc, AuthenticationState>(
+      'should emit [AuthenticationLoading,ForgotPasswordSent] '
+      'when ForgotPasswordEvent is added ',
+      build: () {
+        when(() => forgotPassword(any())).thenAnswer(
+          (_) async => const Right(null),
+        );
+        return authenticationBloc;
+      },
+      act: (bloc) => bloc.add(
+        const ForgotPasswordEvent('email'),
+      ),
+      expect: () => [
+        const AuthenticationLoading(),
+        const ForgotPasswordSent(),
+      ],
+      verify: (_) {
+        verify(
+          () => forgotPassword(
+            'email',
+          ),
+        ).called(1);
+        verifyNoMoreInteractions(forgotPassword);
+      },
+    );
+    blocTest<AuthenticationBloc, AuthenticationState>(
+      'should emit [AuthenticationLoading,AuthenticationError] '
+      'when ForgotPasswordEvent is added and forgotPassword fails ',
+      build: () {
+        when(() => forgotPassword(any())).thenAnswer(
+          (_) async => left(tServerFailure),
+        );
+        return authenticationBloc;
+      },
+      act: (bloc) => bloc.add(
+        const ForgotPasswordEvent('email'),
+      ),
+      expect: () => [
+        const AuthenticationLoading(),
+        AuthenticationError(tServerFailure.errorMessage),
+      ],
+      verify: (_) {
+        verify(
+          () => forgotPassword(
+            'email',
+          ),
+        ).called(1);
+        verifyNoMoreInteractions(forgotPassword);
+      },
+    );
+  });
   group('signInEvent', () {
     const tUser = LocalUserModel.empty();
     blocTest<AuthenticationBloc, AuthenticationState>(

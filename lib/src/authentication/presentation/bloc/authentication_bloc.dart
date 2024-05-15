@@ -26,11 +26,13 @@ class AuthenticationBloc
 
     on<SignInEvent>(_signInHandler);
     on<SignUpEvent>(_signUpHandler);
+    on<ForgotPasswordEvent>(_forgotPasswordHandler);
   }
   final SignInUseCase _signIn;
   final SignUpUseCase _signUp;
   final ForgotPasswordUseCase _forgotPassword;
   final UpdateUserUseCase _updateUser;
+
   Future<void> _signInHandler(
     SignInEvent event,
     Emitter<AuthenticationState> emit,
@@ -61,6 +63,17 @@ class AuthenticationBloc
     result.fold(
       (failure) => emit(AuthenticationError(failure.errorMessage)),
       (_) => emit(const SignedUp()),
+    );
+  }
+
+  Future<void> _forgotPasswordHandler(
+    ForgotPasswordEvent event,
+    Emitter<AuthenticationState> emit,
+  ) async {
+    final result = await _forgotPassword(event.email);
+    result.fold(
+      (failure) => emit(AuthenticationError(failure.errorMessage)),
+      (_) => emit(const ForgotPasswordSent()),
     );
   }
 }
