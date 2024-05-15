@@ -27,6 +27,7 @@ class AuthenticationBloc
     on<SignInEvent>(_signInHandler);
     on<SignUpEvent>(_signUpHandler);
     on<ForgotPasswordEvent>(_forgotPasswordHandler);
+    on<UpdateUserEvent>(_updateUserHandler);
   }
   final SignInUseCase _signIn;
   final SignUpUseCase _signUp;
@@ -74,6 +75,22 @@ class AuthenticationBloc
     result.fold(
       (failure) => emit(AuthenticationError(failure.errorMessage)),
       (_) => emit(const ForgotPasswordSent()),
+    );
+  }
+
+  Future<void> _updateUserHandler(
+    UpdateUserEvent event,
+    Emitter<AuthenticationState> emit,
+  ) async {
+    final result = await _updateUser(
+      UpdateUserParams(
+        action: event.action,
+        userData: event.userData,
+      ),
+    );
+    result.fold(
+      (failure) => emit(AuthenticationError(failure.errorMessage)),
+      (_) => emit(const UserUpdated()),
     );
   }
 }

@@ -220,4 +220,58 @@ void main() {
       },
     );
   });
+
+  group('updateUser', () {
+    blocTest<AuthenticationBloc, AuthenticationState>(
+      'should emit [AuthenticationLoading, UserUpdated ] '
+      'when UpdateUserEvent is added',
+      build: () {
+        when(() => updateUser(any()))
+            .thenAnswer((_) async => const Right(null));
+        return authenticationBloc;
+      },
+      act: (bloc) => bloc.add(
+        UpdateUserEvent(
+          action: tUpdateUSerParams.action,
+          userData: tUpdateUSerParams.userData,
+        ),
+      ),
+      expect: () => [
+        const AuthenticationLoading(),
+        const UserUpdated(),
+      ],
+      verify: (_) {
+        verify(
+          () => updateUser(tUpdateUSerParams),
+        ).called(1);
+        verifyNoMoreInteractions(updateUser);
+      },
+    );
+    blocTest<AuthenticationBloc, AuthenticationState>(
+      'should emit [AuthenticationLoading, AuthenticationError] '
+      'when UpdateUser fails',
+      build: () {
+        when(() => updateUser(any())).thenAnswer(
+          (_) async => left(tServerFailure),
+        );
+        return authenticationBloc;
+      },
+      act: (bloc) => bloc.add(
+        UpdateUserEvent(
+          action: tUpdateUSerParams.action,
+          userData: tUpdateUSerParams.userData,
+        ),
+      ),
+      expect: () => [
+        const AuthenticationLoading(),
+        AuthenticationError(tServerFailure.errorMessage),
+      ],
+      verify: (_) {
+        verify(
+          () => updateUser(tUpdateUSerParams),
+        ).called(1);
+        verifyNoMoreInteractions(updateUser);
+      },
+    );
+  });
 }
