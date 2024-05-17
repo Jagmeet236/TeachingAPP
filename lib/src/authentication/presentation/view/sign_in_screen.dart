@@ -7,7 +7,9 @@ import 'package:education_app/core/utils/core_utils.dart';
 import 'package:education_app/src/authentication/data/models/user_model.dart';
 import 'package:education_app/src/authentication/presentation/bloc/authentication_bloc.dart';
 import 'package:education_app/src/authentication/presentation/view/sign_up_screen.dart';
+import 'package:education_app/src/authentication/presentation/widgets/sign_in_form.dart';
 import 'package:education_app/src/dashBoard/presentation/views/dashboard.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -98,6 +100,27 @@ class _SignInPageState extends State<SignInPage> {
                   ),
                   const SizedBox(
                     height: 10,
+                  ),
+                  SignInForm(
+                    emailController: emailController,
+                    passwordController: passwordController,
+                    formKey: formKey,
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () {},
+                      child: const Text(
+                        'Forgot Password?',
+                        style: TextStyle(
+                          color: Colours.primaryColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),

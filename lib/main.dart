@@ -34,6 +34,8 @@ class MainApp extends StatelessWidget {
           appBarTheme: const AppBarTheme(
             color: Colors.transparent,
           ),
+          colorScheme:
+              ColorScheme.fromSwatch(accentColor: Colours.primaryColor),
         ),
         onGenerateRoute: generateRoute,
       ),
