@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class DashBoard extends StatefulWidget {
-  const DashBoard({super.key});
+class DashBoardPage extends StatefulWidget {
+  const DashBoardPage({super.key});
   static const routeName = '/dashboard';
   @override
-  State<DashBoard> createState() => _DashBoardState();
+  State<DashBoardPage> createState() => _DashBoardPageState();
 }
 
-class _DashBoardState extends State<DashBoard> {
+class _DashBoardPageState extends State<DashBoardPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
