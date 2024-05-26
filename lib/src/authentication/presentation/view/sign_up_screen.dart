@@ -1,12 +1,12 @@
 import 'package:education_app/core/common/app/providers/user_provider.dart';
 import 'package:education_app/core/common/widgets/gradient_background.dart';
 import 'package:education_app/core/common/widgets/rounded_button.dart';
-import 'package:education_app/core/res/colours.dart';
-import 'package:education_app/core/res/fonts.dart';
 import 'package:education_app/core/res/media_res.dart';
 import 'package:education_app/core/utils/core_utils.dart';
 import 'package:education_app/src/authentication/data/models/user_model.dart';
 import 'package:education_app/src/authentication/presentation/bloc/authentication_bloc.dart';
+import 'package:education_app/src/authentication/presentation/widgets/auth_navigator_text_button.dart';
+import 'package:education_app/src/authentication/presentation/widgets/authentication_heading.dart';
 import 'package:education_app/src/authentication/presentation/widgets/sign_up_form.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -65,14 +65,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     horizontal: 20,
                   ),
                   children: <Widget>[
-                    Text(
-                      'Easy to learn, discover more skills.',
-                      style: TextStyle(
-                        fontFamily: Fonts.aBeeZee.fontFamily,
-                        fontSize: 32,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
+                    const AuthenticationHeading(),
                     const SizedBox(
                       height: 30,
                     ),
@@ -85,24 +78,9 @@ class _SignUpPageState extends State<SignUpPage> {
                     const SizedBox(
                       height: 10,
                     ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: TextButton(
-                        onPressed: () {
-                          Navigator.pushReplacementNamed(
-                            context,
-                            '/sign-in',
-                          );
-                        },
-                        child: const Text(
-                          'Already have an account?',
-                          style: TextStyle(
-                            color: Colours.primaryColor,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
+                    const AuthNavigatorTextButton(
+                      buttonText: 'Already have an account?',
+                      navigateTo: '/sign-in',
                     ),
                     const SizedBox(
                       height: 10,
