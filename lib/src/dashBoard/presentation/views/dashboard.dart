@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class DashBoardPage extends StatefulWidget {
@@ -13,6 +14,16 @@ class _DashBoardPageState extends State<DashBoardPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('DashBoard'),
+        automaticallyImplyLeading: false,
+        actions: [
+          IconButton(
+            onPressed: () {
+              FirebaseAuth.instance.signOut();
+              Navigator.pushReplacementNamed(context, '/sign-in');
+            },
+            icon: const Icon(Icons.logout),
+          ),
+        ],
       ),
     );
   }
