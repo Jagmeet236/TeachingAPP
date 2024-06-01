@@ -20,7 +20,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
               fullName: user.displayName ?? '',
             );
             context.userProvider.initUser(localUser);
-            return const DashBoardPage();
+            return const DashBoard();
           }
           return BlocProvider(
             create: (_) => sl<AuthenticationBloc>(),
@@ -53,9 +53,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         ),
         settings: settings,
       );
-    case DashBoardPage.routeName:
+    case DashBoard.routeName:
       return _pageBuilder(
-        (_) => const DashBoardPage(),
+        (_) => const DashBoard(),
         settings: settings,
       );
     default:
