@@ -18,6 +18,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
               email: user.email ?? '',
               points: 0,
               fullName: user.displayName ?? '',
+              profilePic: user.photoURL ?? MediaRes.user,
+              bio: 'Hi, I am using this app.',
             );
             context.userProvider.initUser(localUser);
             return const DashBoard();

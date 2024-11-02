@@ -11,88 +11,102 @@ class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
   const ProfileAppBar({super.key});
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      title: const Padding(
-        padding: EdgeInsets.only(top: 10, left: 10),
-        child: Text(
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 20,
+        vertical: 10,
+      ),
+      child: AppBar(
+        title: const Text(
           'Account',
           style: TextStyle(
             fontWeight: FontWeight.w600,
             fontSize: 24,
           ),
         ),
-      ),
-      actions: [
-        PopupMenuButton(
-          surfaceTintColor: Colors.white,
-          offset: const Offset(0, 50),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(
-              20,
-            ),
-          ),
-          itemBuilder: (_) => [
-            PopupMenuItem<void>(
-              child: const PopupItem(
-                title: 'Edit Profile',
-                icon: Icon(
-                  IconlyLight.edit_square,
-                  color: Colours.neutralTextColor,
-                ),
-              ),
-              onTap: () => context.push(
-                const Placeholder(),
+        actions: [
+          PopupMenuButton(
+            icon: const Icon(IconlyLight.more_circle),
+            surfaceTintColor: Colors.white,
+            offset: const Offset(0, 50),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(
+                20,
               ),
             ),
-            // second
-            PopupMenuItem<void>(
-              child: const PopupItem(
-                title: 'Notification',
-                icon: Icon(
-                  IconlyLight.notification,
-                  color: Colours.neutralTextColor,
-                ),
-              ),
-              onTap: () => context.push(
-                const Placeholder(),
-              ),
-            ),
-            // third
-            PopupMenuItem<void>(
-              child: const PopupItem(
-                title: 'Help',
-                icon: Icon(
-                  CupertinoIcons.question_circle,
-                  color: Colours.neutralTextColor,
-                ),
-              ),
-              onTap: () => context.push(
-                const Placeholder(),
-              ),
-            ),
-            // fourth
-            PopupMenuItem<void>(
-              child: const PopupItem(
-                title: 'Log Out',
-                icon: Icon(
-                  IconlyLight.logout,
-                  color: Colors.black,
-                ),
-              ),
-              onTap: () async {
-                final navigator = Navigator.of(context);
-                await FirebaseAuth.instance.signOut();
-                unawaited(
-                  navigator.pushNamedAndRemoveUntil(
-                    '/',
-                    (route) => false,
+            itemBuilder: (_) => [
+              PopupMenuItem<void>(
+                child: const PopupItem(
+                  title: 'Edit Profile',
+                  icon: Icon(
+                    IconlyLight.edit_square,
+                    color: Colours.neutralTextColor,
                   ),
-                );
-              },
-            ),
-          ],
-        ),
-      ],
+                ),
+                onTap: () => context.push(
+                  const Placeholder(),
+                ),
+              ),
+              // second
+              PopupMenuItem<void>(
+                child: const PopupItem(
+                  title: 'Notification',
+                  icon: Icon(
+                    IconlyLight.notification,
+                    color: Colours.neutralTextColor,
+                  ),
+                ),
+                onTap: () => context.push(
+                  const Placeholder(),
+                ),
+              ),
+              // third
+              PopupMenuItem<void>(
+                child: const PopupItem(
+                  title: 'Help',
+                  icon: Icon(
+                    CupertinoIcons.question_circle,
+                    color: Colours.neutralTextColor,
+                  ),
+                ),
+                onTap: () => context.push(
+                  const Placeholder(),
+                ),
+              ),
+              PopupMenuItem<void>(
+                height: 1,
+                padding: EdgeInsets.zero,
+                child: Divider(
+                  height: 1,
+                  color: Colors.grey.shade300,
+                  endIndent: 16,
+                  indent: 16,
+                ),
+              ),
+              // fourth
+              PopupMenuItem<void>(
+                child: const PopupItem(
+                  title: 'Log Out',
+                  icon: Icon(
+                    IconlyLight.logout,
+                    color: Colors.black,
+                  ),
+                ),
+                onTap: () async {
+                  final navigator = Navigator.of(context);
+                  await FirebaseAuth.instance.signOut();
+                  unawaited(
+                    navigator.pushNamedAndRemoveUntil(
+                      '/',
+                      (route) => false,
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
