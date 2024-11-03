@@ -1,8 +1,8 @@
 import 'package:education_app/core/common/app/providers/user_provider.dart';
 import 'package:education_app/core/res/colours.dart';
 import 'package:education_app/src/authentication/data/models/user_model.dart';
-import 'package:education_app/src/dashBoard/providers/dashboard_controller.dart';
-import 'package:education_app/src/dashBoard/utils/dashboard_utils.dart';
+import 'package:education_app/src/dashBoard/presentation/providers/dashboard_controller.dart';
+import 'package:education_app/src/dashBoard/presentation/utils/dashboard_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:iconly/iconly.dart';

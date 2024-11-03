@@ -207,6 +207,7 @@ class AuthenticationRemoteDataSourceImpl
             fullName: user.displayName ?? '',
             profilePic: user.photoURL ?? '',
             points: 0,
+            bio: 'Hey, i am using this app too.',
           ).toMap(),
         );
   }
