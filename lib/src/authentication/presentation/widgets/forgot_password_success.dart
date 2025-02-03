@@ -6,7 +6,11 @@ import 'package:education_app/core/res/media_res.dart';
 import 'package:flutter/material.dart';
 
 class ForgotPasswordSuccessWidget extends StatefulWidget {
-  const ForgotPasswordSuccessWidget({required this.email, super.key});
+  const ForgotPasswordSuccessWidget({
+    required this.email,
+    super.key,
+  });
+  static const routeName = '/passwordSentSuccess';
   final String email;
   @override
   State<ForgotPasswordSuccessWidget> createState() =>
@@ -49,7 +53,11 @@ class _ForgotPasswordSuccessWidgetState
               const SizedBox(height: 20),
               RoundedButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/sign-in');
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    '/sign-in',
+                    (route) => false,
+                  );
                 },
                 label: 'Go Back',
               ),

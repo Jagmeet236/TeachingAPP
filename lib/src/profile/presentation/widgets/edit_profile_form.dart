@@ -44,10 +44,16 @@ class EditProfileForm extends StatelessWidget {
           hintText: '********',
         ),
         sizedBox,
-        EditProfileFormField(
-          fieldTitle: 'NEW PASSWORD',
-          controller: passwordController,
-          hintText: '********',
+        StatefulBuilder(
+          builder: (_, setState) {
+            oldPasswordController.addListener(() => setState(() {}));
+            return EditProfileFormField(
+              fieldTitle: 'NEW PASSWORD',
+              controller: passwordController,
+              hintText: '********',
+              readOnly: oldPasswordController.text.isEmpty,
+            );
+          },
         ),
         sizedBox,
         EditProfileFormField(

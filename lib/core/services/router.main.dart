@@ -60,6 +60,18 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         (_) => const DashBoard(),
         settings: settings,
       );
+    case ForgotPasswordSuccessWidget.routeName:
+      final email = settings.arguments as String?; // Extract the email
+      return _pageBuilder(
+        (_) => BlocProvider(
+          create: (_) => sl<AuthenticationBloc>(),
+          child: ForgotPasswordSuccessWidget(
+            email: email ?? '',
+          ),
+        ),
+        settings: settings,
+      );
+
     default:
       return _pageBuilder(
         (_) => const PageUnderConstruction(),
