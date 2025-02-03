@@ -42,7 +42,11 @@ class _SignInPageState extends State<SignInPage> {
             CoreUtils.showSnackBar(context, state.message);
           } else if (state is SignedIn) {
             context.read<UserProvider>().initUser(state.user as LocalUserModel);
-            Navigator.pushReplacementNamed(context, '/dashboard');
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              '/dashboard',
+              (route) => false,
+            );
           }
         },
         builder: (context, state) {

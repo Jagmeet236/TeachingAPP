@@ -57,4 +57,13 @@ class Colours {
   static const currentUserChatBubbleColorDarker = Color(0xFF1976D2);
 
   static const otherUserChatBubbleColorDarker = Color(0xFFEEEEEE);
+
+  /// #8A2BE2
+  static const purpleColorDarker = Color(0xFF8A2BE2);
+
+  /// #CBC2F9
+  static const purpleColorLight = Color(0xFFCBC2F9);
+
+  /// #CD5C5C
+  static const redColorDarker = Color(0xFFCD5C5C);
 }

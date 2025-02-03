@@ -21,6 +21,7 @@ class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
         vertical: 10,
       ),
       child: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text(
           'Account',
           style: TextStyle(

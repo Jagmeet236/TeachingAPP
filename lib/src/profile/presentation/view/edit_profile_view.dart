@@ -8,6 +8,7 @@ import 'package:education_app/core/extensions/context_extension.dart';
 import 'package:education_app/core/res/media_res.dart';
 import 'package:education_app/core/utils/core_utils.dart';
 import 'package:education_app/src/authentication/presentation/bloc/authentication_bloc.dart';
+import 'package:education_app/src/profile/presentation/widgets/edit_profile_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -175,7 +176,80 @@ class _EditProfileViewState extends State<EditProfileView> {
             image: MediaRes.profileGradientBackground,
             child: ListView(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              children: [],
+              children: [
+                Builder(
+                  builder: (context) {
+                    final user = context.currentUser!;
+                    final userImage =
+                        user.profilePic == null || user.profilePic!.isEmpty
+                            ? null
+                            : user.profilePic;
+                    return Container(
+                      width: 100,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          image: pickedImage != null
+                              ? FileImage(pickedImage!)
+                              : userImage != null
+                                  ? NetworkImage(
+                                      userImage,
+                                    )
+                                  : const AssetImage(MediaRes.user)
+                                      as ImageProvider,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                      child: Stack(
+                        alignment: AlignmentDirectional.center,
+                        children: [
+                          Container(
+                            height: 100,
+                            width: 100,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.black.withOpacity(.4),
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: pickImage,
+                            icon: Icon(
+                              (pickedImage != null || user.profilePic != null)
+                                  ? Icons.edit
+                                  : Icons.add_a_photo,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 20,
+                  ),
+                  child: Text(
+                    'We recommend an image of at least 400x400',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 14, color: Color(0xFF777E90)),
+                  ),
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                EditProfileForm(
+                  fullNameController: fullNameController,
+                  emailController: emailController,
+                  oldPasswordController: oldPasswordController,
+                  passwordController: passwordController,
+                  bioController: bioController,
+                ),
+              ],
             ),
           ),
         );

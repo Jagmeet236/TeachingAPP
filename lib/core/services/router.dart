@@ -7,6 +7,7 @@ import 'package:education_app/src/authentication/presentation/bloc/authenticatio
 import 'package:education_app/src/authentication/presentation/view/forgot_password_screen.dart';
 import 'package:education_app/src/authentication/presentation/view/sign_in_screen.dart';
 import 'package:education_app/src/authentication/presentation/view/sign_up_screen.dart';
+import 'package:education_app/src/authentication/presentation/widgets/forgot_password_success.dart';
 import 'package:education_app/src/dashBoard/presentation/views/dashboard.dart';
 import 'package:education_app/src/on_boarding/data/dataSources/on_boarding_local_data_source.dart';
 import 'package:education_app/src/on_boarding/presentation/cubit/on_boarding_cubit.dart';

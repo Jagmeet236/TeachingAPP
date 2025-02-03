@@ -6,7 +6,6 @@ import 'package:education_app/src/authentication/presentation/bloc/authenticatio
 import 'package:education_app/src/authentication/presentation/widgets/auth_navigator_text_button.dart';
 import 'package:education_app/src/authentication/presentation/widgets/authentication_heading.dart';
 import 'package:education_app/src/authentication/presentation/widgets/forgot_password_form.dart';
-import 'package:education_app/src/authentication/presentation/widgets/forgot_password_success.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -35,14 +34,16 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         listener: (_, state) {
           if (state is AuthenticationError) {
             CoreUtils.showSnackBar(context, state.message);
+          } else if (state is ForgotPasswordSent) {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              '/passwordSentSuccess',
+              (route) => false,
+              arguments: emailController.text,
+            );
           }
         },
         builder: (context, state) {
-          if (state is ForgotPasswordSent) {
-            return ForgotPasswordSuccessWidget(
-              email: emailController.text,
-            );
-          }
           return GradientBackground(
             image: MediaRes.authGradientBackground,
             child: Center(
