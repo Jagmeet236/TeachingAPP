@@ -6,28 +6,21 @@ class NestedBackButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        try {
-          context.pop();
-          return false;
-        } catch (_) {
-          return true;
-        }
-      },
+    return PopScope(
+      // Allow the back action to happen
       child: IconButton(
         onPressed: () {
           try {
-            context.pop();
-          } catch (_) {
-            Navigator.of(context).pop();
+            context.pop(); // Standard Navigator pop for normal navigation
+          } catch (e) {
+            debugPrint('An error occurred at back button: $e');
+            Navigator.of(context)
+                .pop(); // Handle any potential fallback if needed
           }
         },
         icon: Theme.of(context).platform == TargetPlatform.iOS
             ? const Icon(Icons.arrow_back_ios_new)
-            : const Icon(
-                Icons.arrow_back,
-              ),
+            : const Icon(Icons.arrow_back),
       ),
     );
   }

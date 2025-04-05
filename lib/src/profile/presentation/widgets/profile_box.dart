@@ -30,12 +30,13 @@ class _ProfileBoxState extends State<ProfileBox> {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.3),
+              color: Color.fromARGB(74, 199, 198, 198), // Grey with 30% opacity
+
               spreadRadius: 2,
               blurRadius: 5,
-              offset: const Offset(0, 3),
+              offset: Offset(0, 3),
             ),
           ],
         ),

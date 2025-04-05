@@ -41,8 +41,8 @@ class CourseModel extends Course {
       groupId: map['groupId'] as String,
       createdAt: (map['createdAt'] as Timestamp).toDate(),
       updatedAt: (map['updatedAt'] as Timestamp).toDate(),
-      image: map['image'] as String,
-      imageIsFile: map['imageIsFile'] as bool,
+      image: map['image'] as String?,
+      // imageIsFile: map['imageIsFile'] as bool,
     );
   }
 
@@ -86,7 +86,7 @@ class CourseModel extends Course {
       'createdAt': FieldValue.serverTimestamp(),
       'updatedAt': FieldValue.serverTimestamp(),
       'image': image,
-      'imageIsFile': imageIsFile,
+      // 'imageIsFile': imageIsFile,//
     };
   }
 }

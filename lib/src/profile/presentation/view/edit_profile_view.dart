@@ -207,9 +207,15 @@ class _EditProfileViewState extends State<EditProfileView> {
                           Container(
                             height: 100,
                             width: 100,
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               shape: BoxShape.circle,
-                              color: Colors.black.withOpacity(.4),
+                              color: Color.fromRGBO(
+                                0,
+                                0,
+                                0,
+                                0.4,
+                              ),
+                              // Black with 40% opacity
                             ),
                           ),
                           IconButton(
